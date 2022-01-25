@@ -29,7 +29,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.home'  # Enable the inner home (home)
+    'apps.home',  # Enable the inner home (home)
+    'celery',
+    'celery_progress',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +126,8 @@ STATICFILES_DIRS = (
 
 #############################################################
 #############################################################
+# CELERY_BROKER_URL = 'rediss://:pd81fb269ea4b2fc0a87c77c9d551a98bdfe2da74f16cf66ee470c8079332eac0@ec2-52-18-218-138.eu-west-1.compute.amazonaws.com:23380'
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_BACKEND = 'django-db'
+

@@ -1,12 +1,13 @@
 {% extends "layouts/base.html" %}
 
+
 {% block title %} Dashboard {% endblock %} 
 
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
 {% block content %}
-
+{%load static%}
     <div class="row">
 
       <div class="col-12">
@@ -247,132 +248,41 @@
           </div>
         </div>
       </div>
+
+      
       <div class="col-lg-6 col-md-12">
         <div class="card ">
           <div class="card-header">
-            <h4 class="card-title"> Simple Table</h4>
+            <h4 class="card-title"> Google Trends Analyser</h4>
           </div>
+          
           <div class="card-body">
-            <div class="table-responsive">
-              <table class="table tablesorter " id="">
-                <thead class=" text-primary">
-                  <tr>
-                    <th>
-                      Name
-                    </th>
-                    <th>
-                      Country
-                    </th>
-                    <th>
-                      City
-                    </th>
-                    <th class="text-center">
-                      Salary
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>
-                      Dakota Rice
-                    </td>
-                    <td>
-                      Niger
-                    </td>
-                    <td>
-                      Oud-Turnhout
-                    </td>
-                    <td class="text-center">
-                      $36,738
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Minerva Hooper
-                    </td>
-                    <td>
-                      Curaçao
-                    </td>
-                    <td>
-                      Sinaai-Waas
-                    </td>
-                    <td class="text-center">
-                      $23,789
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Sage Rodriguez
-                    </td>
-                    <td>
-                      Netherlands
-                    </td>
-                    <td>
-                      Baileux
-                    </td>
-                    <td class="text-center">
-                      $56,142
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Philip Chaney
-                    </td>
-                    <td>
-                      Korea, South
-                    </td>
-                    <td>
-                      Overland Park
-                    </td>
-                    <td class="text-center">
-                      $38,735
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Doris Greene
-                    </td>
-                    <td>
-                      Malawi
-                    </td>
-                    <td>
-                      Feldkirchen in Kärnten
-                    </td>
-                    <td class="text-center">
-                      $63,542
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Mason Porter
-                    </td>
-                    <td>
-                      Chile
-                    </td>
-                    <td>
-                      Gloucester
-                    </td>
-                    <td class="text-center">
-                      $78,615
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Jon Porter
-                    </td>
-                    <td>
-                      Portugal
-                    </td>
-                    <td>
-                      Gloucester
-                    </td>
-                    <td class="text-center">
-                      $98,615
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <form action='{% url "trends" %}' method="post">
+              {%csrf_token%}
+              
+              <div class="row">
+                <div class="col-md-5 pr-md-1">
+                  <div class="form-group">
+                    
+                      {{ form }}
+                      
+                  </div>   
+                </div>
+              </div>    
+              <input type=button class="btn btn-primary" value="Back" onClick="javascript:history.go(-1);">
+              <input type="submit" class="btn btn-primary" name="trends" value="Submit" />
+              
+            </form>
+              
+            
+              <div class='progress-wrapper'>
+                <div id='progress-bar' class='progress-bar' style="background-color: #68a9ef; width: 0%;">&nbsp;</div>
+              </div>
+              <div id="progress-bar-message">Waiting for progress to start...</div>
+              <br />
+              <div id="celery-result"></div>
+            
+              
           </div>
         </div>
       </div>
@@ -390,5 +300,27 @@
 
     });
   </script>
+
+<!-- Progress bar code below-->
+{% if task_id %}
+
+<script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+
+<script>
+    function customResult(resultElement, result) {
+        $(resultElement).append(
+        result);
+    }
+</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var progressUrl = "{% url 'celery_progress:task_status' task_id %}";
+            CeleryProgressBar.initProgressBar(progressUrl, {
+                onResult: customResult,
+            });
+        });
+    </script>
+
+    {% endif %}
 
 {% endblock javascripts %}
