@@ -6,6 +6,7 @@ Copyright (c) 2019 - present AppSeed.us
 import os
 from decouple import config
 from unipath import Path
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = Path(__file__).parent
@@ -74,8 +75,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'manufacturing_proj',
+        'USER': 'postgres',
+        'PASSWORD': 'spike',
+        'HOST': 'localhost',
+        'PORT' : '5432'        
     }
 }
 
@@ -124,10 +129,21 @@ STATICFILES_DIRS = (
 )
 
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": os.environ.get('REDIS_URL'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 #############################################################
 #############################################################
-# CELERY_BROKER_URL = 'rediss://:pd81fb269ea4b2fc0a87c77c9d551a98bdfe2da74f16cf66ee470c8079332eac0@ec2-52-18-218-138.eu-west-1.compute.amazonaws.com:23380'
+CELERY_BROKER_URL = 'rediss://:pd81fb269ea4b2fc0a87c77c9d551a98bdfe2da74f16cf66ee470c8079332eac0@ec2-52-18-218-138.eu-west-1.compute.amazonaws.com:23380'
 # CELERY_ACCEPT_CONTENT = ['json']
 # CELERY_TASK_SERIALIZER = 'json'
 # CELERY_RESULT_BACKEND = 'django-db'
 
+# Activate Django-Heroku.
+django_heroku.settings(locals())
