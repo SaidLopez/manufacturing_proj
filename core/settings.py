@@ -76,10 +76,10 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'manufacturing_proj',
-        'USER': 'postgres',
-        'PASSWORD': 'spike',
-        'HOST': 'localhost',
+        'NAME': 'postgresql-closed-53874',
+        'USER': 'lhpdfjidleulob',
+        'PASSWORD': '94ba7c6125fbca52fe9bafa12bb11ac9d824d91e721eccadde83fe01f956daf1',
+        'HOST': 'ec2-52-208-185-143.eu-west-1.compute.amazonaws.com',
         'PORT' : '5432'        
     }
 }
